@@ -1,0 +1,16 @@
+---
+# tasks file for ipa-ptr
+- name: Allow PTR Sync on forward zone
+  ipadnszone:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    name: "{{ ipaserver_domain }}"
+    allow_sync_ptr: true
+    dynamic_update: true
+    state: present
+- name: Allow PTR Sync on reverse zone
+  ipadnszone:
+    ipaadmin_password: "{{ ipaadmin_password }}"
+    name: "{{ ipaserver_reverse_zones }}"
+    allow_sync_ptr: true
+    dynamic_update: true
+    state: present

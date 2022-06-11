@@ -1,0 +1,30 @@
+---
+# tasks file for ipa-group
+- name: Create IPA admins group
+  ipagroup:
+    ipaadmin_password: "{{ admin_password }}"
+    name: "{{ admin_grp }}"
+    description: "IPA group for admins"
+    state: present
+- name: Added users to IPA admins group
+  ipagroup:
+    ipaadmin_password: "{{ admin_password }}"
+    name: "{{ admin_grp }}"
+    action: member
+    user:
+    - "{{ item.full_name }}"
+  with_items: "{{ ipa_admins }}"
+- name: Create IPA users group
+  ipagroup:
+    ipaadmin_password: "{{ admin_password }}"
+    name: "{{ users_grp }}"
+    description: "IPA group for users"
+    state: present
+- name: Added users to IPA users group
+  ipagroup:
+    ipaadmin_password: "{{ admin_password }}"
+    name: "{{ users_grp }}"
+    action: member
+    user:
+    - "{{ item.full_name }}"
+  with_items: "{{ ipa_sudo }}"

@@ -1,0 +1,35 @@
+---
+# tasks file for ipa-sudo
+- name: Adding zip to SUDO Commands
+  ipasudocmd:
+    ipaadmin_password: "{{ admin_password }}"
+    name: /bin/zip
+    state: present
+- name: Adding unzip to SUDO Commands
+  ipasudocmd:
+    ipaadmin_password: "{{ admin_password }}"
+    name: /bin/unzip
+    state: present
+- name: Adding less to SUDO Commands
+  ipasudocmd:
+    ipaadmin_password: "{{ admin_password }}"
+    name: /bin/less
+    state: present
+- name: Creating SUDO Command Group for archiving tools
+  ipasudocmdgroup:
+    ipaadmin_password: "{{ admin_password }}"
+    name: archive_group
+    sudocmd:
+    - /bin/zip
+    - /bin/unzip
+    - /bin/less
+- name: Creating SUDO Rule for archiving tool usage
+  ipasudorule:
+    ipaadmin_password: "{{ admin_password }}"
+    name: archive_rule
+    allow_sudocmdgroup:
+    - archive_group
+    runasuser: root
+    group: "{{ users_grp }}"
+    hostgroup: ipaclients
+    

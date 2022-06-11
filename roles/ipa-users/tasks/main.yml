@@ -1,0 +1,18 @@
+---
+# tasks file for ipa-users
+- name: IPA test user creation
+  ipauser: 
+    ipaadmin_password: "{{ admin_password }}"
+    name: "{{ item.full_name }}"
+    first: "{{ item.first }}"
+    last: "{{ item.last }}"
+    password: "{{ user_password }}"
+  with_items: "{{ ipa_sudo }}"
+- name: IdM admin users
+  ipauser:
+    ipaadmin_password: "{{ admin_password }}"
+    name: "{{ item.full_name }}"
+    first: "{{ item.first }}"
+    last: "{{ item.last }}"
+    password: "{{ admin_password }}"
+  with_items: "{{ ipa_admins }}"

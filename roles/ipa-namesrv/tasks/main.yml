@@ -1,0 +1,6 @@
+---
+# tasks file for ipa-namesrv
+- name: Update resolv.conf with IdM master IP
+  ansible.builtin.command: '/bin/nmcli con mod {{ ansible_default_ipv4.alias }} ipv4.dns {{ nameserver }}'
+- name: Restart interface
+  ansible.builtin.command: '/bin/nmcli con up {{ ansible_default_ipv4.alias }}'

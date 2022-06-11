@@ -1,0 +1,8 @@
+---
+# tasks file for sudo-sssd
+- name: enable sudo with authselect
+  ansible.builtin.command: "authselect enable-feature with-sudo"
+- name: Restart sssd to enable ipa control of sudo
+  ansible.builtin.systemd:
+    name: sssd
+    state: restarted

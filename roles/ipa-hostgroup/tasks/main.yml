@@ -1,0 +1,9 @@
+---
+# tasks file for ipa-hostgroup
+- name: Create hostsgroup for clients
+  ipahostgroup:
+    ipaadmin_password: "{{ admin_password }}"
+    name: "{{ host_group }}"
+    description: "Client servers"
+    host:
+    - "client.example.com"

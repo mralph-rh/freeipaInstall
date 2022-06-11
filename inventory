@@ -1,0 +1,53 @@
+all:
+  children:
+    ipaserver:
+      hosts: 
+        ipa.example.com: 
+          ipaserver_domain: "{{ root_domain }}"
+          ipaserver_realm: "{{ ipaserver_domain | upper}}"
+          ipaserver_setup_dns: yes
+          ipaserver_reverse_zones: "1.168.192.in-addr.arpa"
+          ipaserver_allow_zone_overlap: yes
+          ipaserver_no_forwarders: yes
+          ipaserver_firewalld_zone: FedoraServer
+          ipaserver_install_packages: no
+    ipareplicas:
+      hosts: 
+        rep.example.com: 
+#        rep2.example.com:
+#        rep3.example.com:
+      vars:
+        ipareplica_no_forwarders: yes
+        ipareplica_setup_ca: yes
+        ipareplica_setup_dns: yes
+        ipareplica_firewalld_zone: FedoraServer
+        ipareplica_install_packages: no
+        ipaclient_mkhomedir: yes
+        ipaclient_all_ip_addresses: yes
+    ipaclients:
+      hosts: 
+        client.example.com:
+      vars:
+        ipaclient_mkhomedir: yes
+        ipaclient_all_ip_addresses: yes
+        ipaclient_install_packages: no
+  vars:
+    idm_short: "example"
+    root_domain: "example.com"
+    nameserver: "192.168.1.122"
+    ipaadmin_password: "{{ admin_password }}"
+    ipadm_password: "{{ admin_password }}"
+    admin_password: "P@ssword123!"
+    user_password: "Password_123!"
+## Users
+    ipa_admins: # IPA Admins
+      - { full_name: jdoe, first: John, last: Doe }
+    ipa_sudo: # IPA Admins
+      - { full_name: dauston, first: Duncan, last: Auston }
+      - { full_name: anadine, first: Angie, last: Nadine }
+      - { full_name: sbronte, first: Sammy, last: Bronte }
+## Host group name
+    host_group: ipaclients
+## Group name
+    admin_grp: ipaadmins
+    users_grp: sudogrp

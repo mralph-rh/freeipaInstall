@@ -1,0 +1,66 @@
+---
+- name: Update connection name on Fedora Workstations
+  hosts: all
+  become: true
+  roles:
+  - role: ipa-conname
+- name: Update nameserver entry on ipareplcas and ipaclients
+  hosts: all:!ipaserver
+  become: true
+  roles:
+  - role: ipa-namesrv
+## Must have the ansible-freeipa rpm package installed.
+- name: Installs the IPA server
+  import_playbook: /usr/share/doc/ansible-freeipa/playbooks/install-server.yml
+## By default PTR records are not created. If DNS is handled by a 3rd party application you can comment out the below step.
+- name: Turn IPA DNS PTR Sync on
+  hosts: ipaserver
+  become: True
+  roles:
+  - role: ipa-ptr
+- name: Installs the IPA replicas
+  import_playbook: /usr/share/doc/ansible-freeipa/playbooks/install-replica.yml
+- name: Installs the IPA clients
+  import_playbook: /usr/share/doc/ansible-freeipa/playbooks/install-client.yml
+- name: Create IPA users
+  hosts: ipaserver
+  gather_facts: false
+  become: True
+  roles:
+  - role: ipa-users
+    state: present
+- name: Create groups
+  hosts: ipaserver
+  gather_facts: false
+  become: True
+  roles:
+  - role: ipa-groups
+    state: present
+- name: Create client host group
+  hosts: ipaserver
+  gather_facts: false
+  become: false
+  roles:
+  - role: ipa-hostgroup
+    state: present
+- name: Create HBAC Rules
+  hosts: ipaserver
+  gather_facts: false
+  become: False
+  roles:
+  - role: ipa-hbac
+    state: present
+- name: Enable sudo on clients
+  hosts: ipaclients
+  gather_facts: false
+  become: true
+  roles:
+  - role: sudo-sssd
+    state: present
+- name: Create IPA SUDO rules
+  hosts: ipaserver
+  gather_facts: false
+  become: False
+  roles:
+  - role: ipa-sudo
+    state: present

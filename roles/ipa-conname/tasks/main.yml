@@ -1,0 +1,8 @@
+---
+# tasks file for ipa-conname
+- name: Change connnection name on Fedora Workstations
+  ansible.builtin.command: "/usr/bin/nmcli con mod 'Wired connection 1' con-name {{ ansible_default_ipv4.alias }}"
+  when: ("{{ ansible_distribution }}" == "Fedora")
+  ignore_errors: True
+- name: Restart interface
+  ansible.builtin.command: '/bin/nmcli con up {{ ansible_default_ipv4.alias }}'
