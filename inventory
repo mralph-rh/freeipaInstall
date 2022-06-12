@@ -35,10 +35,10 @@ all:
     idm_short: "example"
     root_domain: "example.com"
     nameserver: "192.168.1.122"
-    ipaadmin_password: "{{ admin_password }}"
-    ipadm_password: "{{ admin_password }}"
-    admin_password: "P@ssword123!"
-    user_password: "Password_123!"
+    ipaadmin_password: "{{ admin_password }}" # IPA Admin password
+    ipadm_password: "{{ admin_password }}" # IPA Directory Manager password
+    admin_password: "" # ipa_admin users password
+    user_password: "" # ipa_sudo users passwords
 ## Users
     ipa_admins: # IPA Admins
       - { full_name: jdoe, first: John, last: Doe }
